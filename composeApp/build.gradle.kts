@@ -6,23 +6,21 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.android.kotlin.multiplatform.library)
 
-    alias(libs.plugins.jetbrainsCompose)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
 
 kotlin {
-//    androidTarget {
-//        compilations.all {
-//            compileTaskProvider.configure {
-//                compilerOptions {
-//                    jvmTarget.set(JvmTarget.JVM_1_8)
-//                }
-//            }
-//        }
-//    }
+    targets.all {
+        compilations.all {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
+        }
+    }
 
     
     androidLibrary {
@@ -40,7 +38,7 @@ kotlin {
         compilations.configureEach {
             compilerOptions.configure {
                 jvmTarget.set(
-                    JvmTarget.JVM_1_8
+                    JvmTarget.JVM_11
                 )
             }
         }
@@ -83,12 +81,13 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
+            implementation(compose.materialIconsExtended)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
             //lifecycle
             implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.jetbrains.compose.navigation)
 
             implementation(libs.kotlinx.serialization.json)
@@ -118,7 +117,7 @@ kotlin {
             api(libs.koin.android)
             api(libs.koin.androidx.compose)
 
-
+            api(libs.ktor.client.okhttp)
             api(libs.ktor.serialization.kotlinx.json)
 
             // Firebase
@@ -136,6 +135,9 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
 
         dependencies {

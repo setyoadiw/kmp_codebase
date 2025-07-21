@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
 
 android {
@@ -16,6 +17,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {
@@ -28,23 +30,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
-//dependencies {
-//    implementation(projects.composeApp)
-////    implementation(libs.compose.ui)
-////    implementation(libs.compose.ui.tooling.preview)
-////    implementation(libs.compose.material3)
-//    implementation(libs.androidx.activity.compose)
-//    //debugImplementation(libs.compose.ui.tooling)
-//}
-
 dependencies {
     implementation(projects.composeApp)
+    debugImplementation(compose.uiTooling)
 }
